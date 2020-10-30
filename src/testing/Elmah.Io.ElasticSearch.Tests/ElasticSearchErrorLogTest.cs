@@ -120,7 +120,7 @@ namespace Elmah.Io.ElasticSearch.Tests
             responseMock.Setup(x => x.Id).Returns(id);
             responseMock.Setup(x => x.IsValid).Returns(true);
             elasticClientMock
-                .Setup(x => x.Index(It.IsAny<ErrorDocument>(), It.IsAny<Func<IndexDescriptor<ErrorDocument>, IndexDescriptor<ErrorDocument>>>()))
+                .Setup(x => x.IndexDocument(It.IsAny<ErrorDocument>()))
                 .Returns(responseMock.Object);
 
             var errorLog = new ElasticSearchErrorLog(elasticClientMock.Object, new Hashtable())
@@ -135,7 +135,7 @@ namespace Elmah.Io.ElasticSearch.Tests
             Assert.That(returnId, Is.EqualTo(id));
             elasticClientMock.Verify(
                 x =>
-                x.Index(
+                x.IndexDocument(
                     It.Is<ErrorDocument>(
                         d =>
                         d.ApplicationName == applicationName 
@@ -148,7 +148,7 @@ namespace Elmah.Io.ElasticSearch.Tests
                         && d.Type == error.Type 
                         && d.User == error.User 
                         && d.WebHostHtmlMessage == error.WebHostHtmlMessage
-                        ), It.IsAny<Func<IndexDescriptor<ErrorDocument>, IndexDescriptor<ErrorDocument>>>()));
+                        )));
         }
 
 

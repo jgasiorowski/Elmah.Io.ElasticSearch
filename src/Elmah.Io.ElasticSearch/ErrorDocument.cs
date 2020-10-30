@@ -11,7 +11,7 @@ namespace Elmah.Io.ElasticSearch
     {
         public string Id { get; set; }
 
-        [String(Index = FieldIndexOption.No)]
+        [Text(Index = false)]
         public string ErrorXml { get; set; }
 
         public string ApplicationName { get; set; }

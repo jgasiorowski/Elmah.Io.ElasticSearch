@@ -11,6 +11,11 @@ namespace Elmah.Io.ElasticSearch.Web.Controllers
         //
         // GET: /Home/
 
+        public ActionResult Ex()
+        {
+            throw new Exception("Test");
+        }
+
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Elmah");

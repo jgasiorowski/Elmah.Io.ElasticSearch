@@ -40,7 +40,7 @@ namespace Elmah.Io.ElasticSearch
 
         public override string Log(Error error)
         {
-            var indexResponse = _elasticClient.Index(new ErrorDocument
+            var indexResponse = _elasticClient.IndexDocument(new ErrorDocument
             {
                 ApplicationName = ApplicationName,
                 ErrorXml = ErrorXml.EncodeString(error),
@@ -73,14 +73,14 @@ namespace Elmah.Io.ElasticSearch
         public override int GetErrors(int pageIndex, int pageSize, IList errorEntryList)
         {
             var result = _elasticClient.Search<ErrorDocument>(x => x
-                .Query(q=> q
-                   .Term("applicationName.raw", ApplicationName)
-                 )
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)
                 .Sort(s => s
-                    .Descending(d=> d.Time)
+                    .Descending(d => d.Time)
                  )
+                .Query(q => q
+                   .Term(p => p.ApplicationName.Suffix("raw"), ApplicationName)
+                   )
                 )
                 .VerifySuccessfulResponse();
 
